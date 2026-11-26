@@ -38,7 +38,7 @@ body{background:#06271b;background-image:radial-gradient(ellipse at 50% 4%,#7891
 @media(prefers-reduced-motion:reduce){.page.active,.tab.active svg,.prayer-tiles .prayer.tap-feedback{animation:none}.tab,.tab svg,.prayer-tiles .prayer,.tap-toast{transition:none}}
  .splash-dua{max-width:min(86vw,340px);margin-top:7px;padding:12px 17px;border-top:1px solid #b59a5d;border-bottom:1px solid #b59a5d;color:#f3dfaa;font-size:15px;line-height:1.9;text-align:center;text-shadow:0 2px 8px #061b14;animation:duaFade .7s ease both}.splash-dua:before{content:"✧  دعاء  ✧";display:block;color:#d8bd78;font-size:11px;margin-bottom:3px;letter-spacing:1px}@keyframes duaFade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}@media(prefers-reduced-motion:reduce){.splash-dua{animation:none}}\n.tabs .tab svg{width:48px;height:48px;display:block;overflow:visible;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}.tabs .tab{gap:3px}.tabs .tab.active svg{filter:drop-shadow(0 0 7px rgba(232,197,119,.7))}\n
 /* Floating bottom navigation bar */
-.wrap{padding-bottom:calc(190px + env(safe-area-inset-bottom))}
+.wrap{padding-bottom:calc(320px + env(safe-area-inset-bottom)) !important;scroll-padding-bottom:calc(320px + env(safe-area-inset-bottom))}
 .tabs{
   position:fixed;
   left:50%;
