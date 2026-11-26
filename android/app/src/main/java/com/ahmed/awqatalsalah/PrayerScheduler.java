@@ -41,6 +41,7 @@ final class PrayerScheduler {
         EXECUTOR.execute(() -> {
             try {
                 JSONObject payload = new JSONObject(json);
+                context.getSharedPreferences(PREFS, 0).edit().putString("last_payload", json).apply();
                 double lat = payload.getDouble("latitude");
                 double lon = payload.getDouble("longitude");
                 int method = payload.optInt("method", 3);
@@ -49,6 +50,7 @@ final class PrayerScheduler {
                 String[] keys = {"Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"};
                 String[] names = {"الفجر", "الظهر", "العصر", "المغرب", "العشاء"};
                 Calendar now = Calendar.getInstance();
+                Calendar todayStart = (Calendar) now.clone(); todayStart.set(Calendar.HOUR_OF_DAY, 0); todayStart.set(Calendar.MINUTE, 0); todayStart.set(Calendar.SECOND, 0); todayStart.set(Calendar.MILLISECOND, 0);
                 Calendar end = (Calendar) now.clone(); end.add(Calendar.DAY_OF_YEAR, 12);
                 SimpleDateFormat monthFmt = new SimpleDateFormat("yyyy/M", Locale.US);
                 monthFmt.setTimeZone(TimeZone.getDefault());
@@ -76,7 +78,7 @@ final class PrayerScheduler {
                     try { dayDate = dateFmt.parse(greg.optString("date")); } catch (Exception ex) { continue; }
                     if (dayDate == null) continue;
                     Calendar dayCal = Calendar.getInstance(); dayCal.setTime(dayDate);
-                    if (dayCal.before(now) || dayCal.after(end)) continue;
+                    if (dayCal.before(todayStart) || dayCal.after(end)) continue;
                     for (int p = 0; p < keys.length && scheduled < 60; p++) {
                         if (enabled != null && !enabled.optBoolean(keys[p], true)) continue;
                         String raw = timings.optString(keys[p], "");
