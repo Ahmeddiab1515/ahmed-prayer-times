@@ -1,4 +1,4 @@
-const CACHE = "awqat-al-salah-v7";
+const CACHE = "awqat-al-salah-v8";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", event => {
