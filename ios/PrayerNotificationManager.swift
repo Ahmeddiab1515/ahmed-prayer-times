@@ -74,7 +74,9 @@ final class PrayerNotificationManager: ObservableObject {
             let calendar = Calendar.current
             let endDate = calendar.date(byAdding: .day, value: 12, to: now) ?? now
             let months = [calendar.dateComponents([.year, .month], from: now),
-                          calendar.dateComponents([.year, .month], from: endDate)]
+                          calendar.dateComponents([.year, .month], from: endDate)].sorted {
+                (($0.year ?? 0) * 12 + ($0.month ?? 0)) < (($1.year ?? 0) * 12 + ($1.month ?? 0))
+            }
             var entries: [[String: Any]] = []
             for month in months {
                 guard let year = month.year, let monthNumber = month.month else { continue }
