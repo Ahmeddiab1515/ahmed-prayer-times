@@ -56,8 +56,8 @@ final class PrayerScheduler {
                 Calendar nextMonthCal = (Calendar) now.clone(); nextMonthCal.add(Calendar.MONTH, 1);
                 String nextMonth = monthFmt.format(nextMonthCal.getTime());
                 JSONArray allDays = new JSONArray();
-                allDays.putAll(fetchMonth(currentMonth, lat, lon, method, school));
-                if (!nextMonth.equals(currentMonth)) allDays.putAll(fetchMonth(nextMonth, lat, lon, method, school));
+                appendDays(allDays, fetchMonth(currentMonth, lat, lon, method, school));
+                if (!nextMonth.equals(currentMonth)) appendDays(allDays, fetchMonth(nextMonth, lat, lon, method, school));
 
                 cancel(context);
                 AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -104,6 +104,10 @@ final class PrayerScheduler {
                 context.getSharedPreferences(PREFS, 0).edit().putString(IDS, ids.toString()).apply();
             } catch (Exception ex) { android.util.Log.e("AwqatPrayer", "Scheduling failed", ex); }
         });
+    }
+
+    private static void appendDays(JSONArray target, JSONArray source) throws Exception {
+        for (int i = 0; i < source.length(); i++) target.put(source.get(i));
     }
 
     private static JSONArray fetchMonth(String month, double lat, double lon, int method, int school) throws Exception {
