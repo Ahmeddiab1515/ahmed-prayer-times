@@ -152,13 +152,13 @@ function applyIconPreferences(){
 }
 $("saveIconStyles").onclick=()=>{const p=prefs();p.navIconStyle=$("navIconStyle").value;p.appIconStyle=$("appIconStyle").value;save(p);applyIconPreferences();$("iconStatus").textContent="تم حفظ شكل الأيقونات. أيقونة الشاشة الجديدة تظهر بعد إعادة إضافة التطبيق من Safari.";};
 $("appIconStyle").onchange=()=>{const svg=makeAppIcon($("appIconStyle").value);$("appIconPreview").innerHTML=svg};
-let lastScrollY=window.scrollY,scrollDirectionLock=false;
+let lastScrollY=window.scrollY;
 window.addEventListener("scroll",()=>{
  const currentY=Math.max(0,window.scrollY),delta=currentY-lastScrollY;
  if(Math.abs(delta)>5){
   const bar=document.querySelector(".tabs");
   if(bar){
-   if(delta>0&&currentY>90)bar.classList.add("nav-hidden");
+   if(delta>0)bar.classList.add("nav-hidden");
    else if(delta<0)bar.classList.remove("nav-hidden");
   }
   lastScrollY=currentY;
