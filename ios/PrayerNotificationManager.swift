@@ -122,7 +122,9 @@ final class PrayerNotificationManager: ObservableObject {
                     let content = UNMutableNotificationContent()
                     content.title = prayer.title
                     content.body = "حان الآن موعد الصلاة"
-                    content.sound = .default
+                    content.sound = Bundle.main.url(forResource: "adhan", withExtension: "caf") != nil
+                        ? UNNotificationSound(named: UNNotificationSoundName("adhan.caf"))
+                        : .default
                     let triggerParts = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
                     let trigger = UNCalendarNotificationTrigger(dateMatching: triggerParts, repeats: false)
                     let id = prefix + String(Int(fireDate.timeIntervalSince1970))
@@ -132,7 +134,7 @@ final class PrayerNotificationManager: ObservableObject {
                 }
                 if scheduled >= 60 { break }
             }
-            status = "تمت جدولة \(scheduled) تنبيهًا للأيام الـ12 القادمة"
+            status = "تمت جدولة \(scheduled) تنبيهًا بمقطع من أذان المنشاوي للأيام الـ12 القادمة"
         } catch {
             status = "تعذر تحديث التنبيهات. افتح التطبيق وتحقق من الإنترنت"
         }
