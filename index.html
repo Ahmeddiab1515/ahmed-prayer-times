@@ -153,16 +153,26 @@ function applyIconPreferences(){
 $("saveIconStyles").onclick=()=>{const p=prefs();p.navIconStyle=$("navIconStyle").value;p.appIconStyle=$("appIconStyle").value;save(p);applyIconPreferences();$("iconStatus").textContent="تم حفظ شكل الأيقونات. أيقونة الشاشة الجديدة تظهر بعد إعادة إضافة التطبيق من Safari.";};
 $("appIconStyle").onchange=()=>{const svg=makeAppIcon($("appIconStyle").value);$("appIconPreview").innerHTML=svg};
 let lastScrollY=window.scrollY;
+let scrollDirection=0,scrollDistance=0;
 window.addEventListener("scroll",()=>{
  const currentY=Math.max(0,window.scrollY),delta=currentY-lastScrollY;
- if(Math.abs(delta)>5){
-  const bar=document.querySelector(".tabs");
-  if(bar){
-   if(delta>0)bar.classList.add("nav-hidden");
-   else if(delta<0)bar.classList.remove("nav-hidden");
+ const bar=document.querySelector(".tabs");
+ if(currentY<=8){
+  if(bar)bar.classList.remove("nav-hidden");
+  scrollDirection=0;scrollDistance=0;
+ }else if(Math.abs(delta)>0){
+  const direction=delta>0?1:-1;
+  if(direction!==scrollDirection){scrollDirection=direction;scrollDistance=0;}
+  scrollDistance+=Math.abs(delta);
+  if(scrollDistance>=14){
+   if(bar){
+    if(direction===1)bar.classList.add("nav-hidden");
+    else bar.classList.remove("nav-hidden");
+   }
+   scrollDistance=0;
   }
-  lastScrollY=currentY;
  }
+ lastScrollY=currentY;
 },{passive:true});
 const pageTabs=[...document.querySelectorAll(".tab")],pages=[...document.querySelectorAll(".page")];
 pageTabs.forEach(b=>b.addEventListener("click",()=>{
