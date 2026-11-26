@@ -37,21 +37,21 @@ body{background:#06271b;background-image:radial-gradient(ellipse at 50% 4%,#7891
 .tap-toast.show{opacity:1;transform:translate(-50%,0)}
 @media(prefers-reduced-motion:reduce){.page.active,.tab.active svg,.prayer-tiles .prayer.tap-feedback{animation:none}.tab,.tab svg,.prayer-tiles .prayer,.tap-toast{transition:none}}
  .splash-dua{max-width:min(86vw,340px);margin-top:7px;padding:12px 17px;border-top:1px solid #b59a5d;border-bottom:1px solid #b59a5d;color:#f3dfaa;font-size:15px;line-height:1.9;text-align:center;text-shadow:0 2px 8px #061b14;animation:duaFade .7s ease both}.splash-dua:before{content:"✧  دعاء  ✧";display:block;color:#d8bd78;font-size:11px;margin-bottom:3px;letter-spacing:1px}@keyframes duaFade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}@media(prefers-reduced-motion:reduce){.splash-dua{animation:none}}\n.tabs .tab svg{width:48px;height:48px;display:block;overflow:visible;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}.tabs .tab{gap:3px}.tabs .tab.active svg{filter:drop-shadow(0 0 7px rgba(232,197,119,.7))}\n
-/* Floating bottom navigation bar */
-.wrap{padding-bottom:calc(320px + env(safe-area-inset-bottom)) !important;scroll-padding-bottom:calc(320px + env(safe-area-inset-bottom))}
+/* Navigation stays in document flow so it can never cover page text */
+.wrap{padding-bottom:calc(18px + env(safe-area-inset-bottom)) !important;scroll-padding-bottom:calc(24px + env(safe-area-inset-bottom))}
 .tabs{
-  position:fixed;
-  left:50%;
+  position:relative;
+  left:auto;
   right:auto;
-  bottom:calc(12px + env(safe-area-inset-bottom));
-  transform:translateX(-50%);
-  z-index:90;
-  width:min(94%,460px);
-  margin:0;
+  bottom:auto;
+  transform:none;
+  z-index:20;
+  width:100%;
+  margin:24px auto 12px;
   padding:7px 7px 5px;
   border:1px solid #d2b15c;
   border-radius:27px;
-  background:rgba(4,43,28,.94);
+  background:rgba(4,43,28,.96);
   box-shadow:0 9px 30px #00170fbb, inset 0 1px #fff2c733;
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
@@ -59,14 +59,14 @@ body{background:#06271b;background-image:radial-gradient(ellipse at 50% 4%,#7891
 .tabs .tab{min-height:70px}
 .tap-toast{z-index:110}
 @media(max-width:390px){
-  .tabs{width:calc(100% - 24px);bottom:calc(10px + env(safe-area-inset-bottom));}
+  .tabs{width:100%;margin-left:auto;margin-right:auto;}
   .tabs .tab{min-height:66px}
 }
 
 
 /* Hide floating navigation while scrolling down; reveal while scrolling up */
 .tabs{transition:transform .32s ease,opacity .28s ease,box-shadow .2s ease}
-.tabs.nav-hidden{transform:translate(-50%,calc(150% + env(safe-area-inset-bottom)));opacity:0;pointer-events:none}
+.tabs.nav-hidden{transform:translateY(18px);opacity:0;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.tabs{transition:none}}
 /* Gold sculpted Islamic navigation icons matching the approved reference */
 .tabs .tab svg{width:54px;height:54px;fill:initial;stroke:none;filter:drop-shadow(0 3px 3px rgba(0,0,0,.42));overflow:visible}
