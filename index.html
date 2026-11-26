@@ -64,6 +64,10 @@ body{background:#06271b;background-image:radial-gradient(ellipse at 50% 4%,#7891
 }
 
 
+/* Hide floating navigation while scrolling down; reveal while scrolling up */
+.tabs{transition:transform .32s ease,opacity .28s ease,box-shadow .2s ease}
+.tabs.nav-hidden{transform:translate(-50%,calc(150% + env(safe-area-inset-bottom)));opacity:0;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.tabs{transition:none}}
 /* Gold sculpted Islamic navigation icons matching the approved reference */
 .tabs .tab svg{width:54px;height:54px;fill:initial;stroke:none;filter:drop-shadow(0 3px 3px rgba(0,0,0,.42));overflow:visible}
 .tabs .tab.active svg{filter:drop-shadow(0 0 8px rgba(255,218,112,.82)) drop-shadow(0 3px 3px rgba(0,0,0,.4))}
@@ -148,8 +152,21 @@ function applyIconPreferences(){
 }
 $("saveIconStyles").onclick=()=>{const p=prefs();p.navIconStyle=$("navIconStyle").value;p.appIconStyle=$("appIconStyle").value;save(p);applyIconPreferences();$("iconStatus").textContent="تم حفظ شكل الأيقونات. أيقونة الشاشة الجديدة تظهر بعد إعادة إضافة التطبيق من Safari.";};
 $("appIconStyle").onchange=()=>{const svg=makeAppIcon($("appIconStyle").value);$("appIconPreview").innerHTML=svg};
+let lastScrollY=window.scrollY,scrollDirectionLock=false;
+window.addEventListener("scroll",()=>{
+ const currentY=Math.max(0,window.scrollY),delta=currentY-lastScrollY;
+ if(Math.abs(delta)>5){
+  const bar=document.querySelector(".tabs");
+  if(bar){
+   if(delta>0&&currentY>90)bar.classList.add("nav-hidden");
+   else if(delta<0)bar.classList.remove("nav-hidden");
+  }
+  lastScrollY=currentY;
+ }
+},{passive:true});
 const pageTabs=[...document.querySelectorAll(".tab")],pages=[...document.querySelectorAll(".page")];
 pageTabs.forEach(b=>b.addEventListener("click",()=>{
+ document.querySelector(".tabs").classList.remove("nav-hidden");
  pageTabs.forEach(x=>{const active=x===b;x.classList.toggle("active",active);if(active){x.setAttribute("aria-current","page")}else{x.removeAttribute("aria-current")}});
  pages.forEach(x=>{const active=x.id===b.dataset.page;x.classList.toggle("active",active);x.setAttribute("aria-hidden",String(!active))});
  b.classList.remove("tap-feedback");void b.offsetWidth;b.classList.add("tap-feedback");setTimeout(()=>b.classList.remove("tap-feedback"),420);
