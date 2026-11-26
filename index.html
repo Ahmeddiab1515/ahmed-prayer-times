@@ -196,7 +196,31 @@ const builtInAudio={
 const savedAdhan=prefs();if(savedAdhan.builtInAdhan)$("builtInAdhan").value=savedAdhan.builtInAdhan;
 $("builtInAdhan").onchange=()=>{const p=prefs();p.builtInAdhan=$("builtInAdhan").value;save(p);if(audioUrl){URL.revokeObjectURL(audioUrl);audioUrl=null;$("audioStatus").textContent="تم اختيار صوت المكتبة الجاهز."}};
 $("testAudio").onclick=async()=>{try{if(previewAudio){previewAudio.pause();previewAudio=null}const src=audioUrl||builtInAudio[$("builtInAdhan").value];previewAudio=new Audio(src);previewAudio.onerror=()=>$("audioStatus").textContent="تعذر تحميل الصوت. تحقق من الإنترنت وحاول مرة أخرى.";await previewAudio.play();$("audioStatus").textContent=audioUrl?"يتم تشغيل الملف الذي اخترته.":"يتم تشغيل صوت الأذان المختار من المكتبة."}catch(e){$("audioStatus").textContent="لم يبدأ التشغيل. اضغط مرة أخرى أو تحقق من اتصال الإنترنت."}};
-$("notifyBtn").onclick=async()=>{if(!("Notification"in window)){$("settingsStatus").textContent="الإشعارات غير مدعومة.";return}const p=await Notification.requestPermission();$("settingsStatus").textContent=p==="granted"?"تم السماح بالإشعارات، لكن التذكير بالخلفية غير مضمون.":"لم يتم السماح بالإشعارات."};
+async function enablePrayerNotifications(){
+ const status=$("settingsStatus"),button=$("notifyBtn");
+ const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+ const isInstalled=window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true;
+ button.disabled=true;button.textContent="جارٍ تفعيل الإشعارات...";
+ try{
+  if(!window.isSecureContext){status.textContent="لا يمكن تفعيل الإشعارات من اتصال غير آمن. افتح التطبيق من رابط HTTPS.";return}
+  if(!("Notification"in window)){status.textContent=isIOS?"على iPhone: أضف التطبيق إلى الشاشة الرئيسية أولًا، ثم افتحه من الأيقونة وجرّب التفعيل.":"هذا المتصفح لا يدعم إشعارات الويب.";return}
+  if(isIOS&&!isInstalled){status.textContent="على iPhone لازم تثبّت التطبيق أولًا: افتح الرابط في Safari ثم مشاركة ← إضافة إلى الشاشة الرئيسية، وبعدها افتحه من الأيقونة واضغط تفعيل الإشعارات.";return}
+  if(!("serviceWorker"in navigator)){status.textContent="المتصفح لا يدعم خدمة الإشعارات المطلوبة.";return}
+  if(Notification.permission==="denied"){status.textContent="الإشعارات مرفوضة من إعدادات الجهاز. اسمح بها للتطبيق من إعدادات الإشعارات في iPhone ثم حاول مرة أخرى.";return}
+  const permission=Notification.permission==="granted"?"granted":await Notification.requestPermission();
+  if(permission!=="granted"){status.textContent=permission==="denied"?"تم رفض الإشعارات. غيّر الإذن من إعدادات الجهاز ثم أعد المحاولة.":"لم يتم منح إذن الإشعارات.";return}
+  const registration=await navigator.serviceWorker.ready;
+  if(!registration||typeof registration.showNotification!=="function"){status.textContent="تم منح الإذن، لكن المتصفح لا يستطيع عرض الإشعار. جرّب فتح التطبيق من الشاشة الرئيسية.";return}
+  await registration.showNotification("أوقات الصلاة",{body:"تم تفعيل الإشعارات بنجاح على هذا الجهاز.",icon:"./icon.svg",badge:"./icon.svg",tag:"prayer-notification-test",renotify:false});
+  status.textContent="تم تفعيل الإشعارات بنجاح، ووصل إشعار تجريبي على جهازك.";
+ }catch(error){
+  console.error("Notification activation failed:",error);
+  status.textContent="حصل خطأ أثناء التفعيل ("+(error&&error.name?error.name:"غير معروف")+"). تأكد من تثبيت التطبيق والسماح بالإشعارات ثم حاول مرة أخرى.";
+ }finally{
+  button.disabled=false;button.textContent="تفعيل إشعارات الصلاة";
+ }
+}
+$("notifyBtn").addEventListener("click",enablePrayerNotifications);
 $("installHelp").onclick=()=>$("settingsStatus").textContent="في Safari اضغط مشاركة ثم إضافة إلى الشاشة الرئيسية.";
 if("serviceWorker"in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(console.warn);
 applyIconPreferences();const saved=prefs();if(!saved.timeFormat12Applied){saved.timeFormat="12";saved.timeFormat12Applied=true;save(saved)}if(saved.method)$("method").value=saved.method;if(saved.school)$("school").value=saved.school;$("timeFormat").value=saved.timeFormat||"12";renderAdhan();updateQibla();setInterval(updateNext,1000);setInterval(autoRefresh,60000);document.addEventListener("visibilitychange",()=>{if(!document.hidden){autoRefresh();if(!coords)locate()}});const old=localStorage.getItem("lastCoords");if(old){try{const p=JSON.parse(old);coords=p;loadTimes(p.lat,p.lon);locate()}catch(e){locate()}}else locate();
