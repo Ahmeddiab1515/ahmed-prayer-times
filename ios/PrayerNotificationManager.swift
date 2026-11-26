@@ -15,7 +15,8 @@ final class PrayerNotificationManager: ObservableObject {
         UserDefaults.standard.set(enabled, forKey: "backgroundPrayerAlertsEnabled")
         guard enabled else {
             Task {
-                let ids = await center.pendingNotificationRequests().map(\.identifier).filter { $0.hasPrefix(prefix) }
+                let pending = await center.pendingNotificationRequests()
+                let ids = pending.map(\.identifier).filter { $0.hasPrefix(prefix) }
                 center.removePendingNotificationRequests(withIdentifiers: ids)
                 status = "تم إيقاف تنبيهات الخلفية"
             }
@@ -89,7 +90,8 @@ final class PrayerNotificationManager: ObservableObject {
                 entries.append(contentsOf: response?["data"] as? [[String: Any]] ?? [])
             }
 
-            let oldIDs = await center.pendingNotificationRequests().map(\.identifier).filter { $0.hasPrefix(prefix) }
+            let pending = await center.pendingNotificationRequests()
+            let oldIDs = pending.map(\.identifier).filter { $0.hasPrefix(prefix) }
             center.removePendingNotificationRequests(withIdentifiers: oldIDs)
 
             var scheduled = 0
