@@ -16,7 +16,7 @@
  A10000000000000000000016 = {isa = PBXFileReference; lastKnownFileType = file; path = Resources/adhan.caf; sourceTree = "<group>";};
  A10000000000000000000030 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A10000000000000000000040, A10000000000000000000041, A10000000000000000000042,); runOnlyForDeploymentPostprocessing = 0;};
  A10000000000000000000031 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (A10000000000000000000043,); runOnlyForDeploymentPostprocessing = 0;};
- A10000000000000000000032 = {isa = PBXShellScriptBuildPhase; buildActionMask = 2147483647; files = (); inputPaths = (); outputPaths = ("$(SRCROOT)/Resources/adhan.caf",); name = "Prepare Minshawi notification sound"; runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/bash; shellScript = "\"$SRCROOT/prepare_adhan_sound.sh\"\n";};
+ A10000000000000000000032 = {isa = PBXShellScriptBuildPhase; buildActionMask = 2147483647; files = (); inputPaths = (); outputPaths = ("$(SRCROOT)/Resources/adhan.caf",); name = "Prepare Minshawi notification sound"; runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/bash; shellScript = "/bin/bash \"$SRCROOT/prepare_adhan_sound.sh\"\n";};
  A10000000000000000000040 = {isa = PBXBuildFile; fileRef = A10000000000000000000011;};
  A10000000000000000000041 = {isa = PBXBuildFile; fileRef = A10000000000000000000012;};
  A10000000000000000000042 = {isa = PBXBuildFile; fileRef = A10000000000000000000013;};
