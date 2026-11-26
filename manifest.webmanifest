@@ -1,6 +1,6 @@
 {
-  "name": "Ahmed Harhash – مواقيت الصلاة",
-  "short_name": "مواقيت الصلاة",
+  "name": "أوقات الصلاة",
+  "short_name": "أوقات الصلاة",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "./",
@@ -8,7 +8,7 @@
   "display": "standalone",
   "background_color": "#102b23",
   "theme_color": "#173d30",
-  "description": "مواقيت الصلاة والأذان حسب موقعك",
+  "description": "أوقات الصلاة والأذان حسب موقعك",
   "icons": [
     {
       "src": "./icon.svg",
